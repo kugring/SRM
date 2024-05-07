@@ -677,3 +677,11 @@ fileUpload (파일 업로드)
 =============================================
 
 getFile (파일 불러오기)
+
+
+board 
+
+boardNumber, title, content, 
+boardTitleImage, boardImageLIst, writeDateTime, 
+faveriteCount, commentCount, 
+viewCount, writerEmail, 
