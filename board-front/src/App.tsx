@@ -1,12 +1,44 @@
 import Footer from 'layouts/Footer';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Main from 'views/Main';
+import Authentication from 'views/Authentication';
+import User from 'views/User';
+import Container from 'layouts/Container';
+import BoardDetail from 'views/Board/Detail';
+import BoardUpdate from 'views/Board/Update';
+import BoardWrite from 'views/Board/Write';
+import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant';
 
+
+//          component: Application 컴포넌트       //
 function App() {
 
+  //          render: Application 컴포넌트 렌더링       //
+
+  //          description: 메인 화면 : '/' - Main       //
+  //          description: 로그인 + 회원가입 : '/auth' - Authentication       //
+  //          description: 검색 화면 : '/search/:serchWord' - Search       //
+  //          description: 유저 페이지 : '/user/:userEmail' - User       //
+  //          description: 게시물 상세보기 : '/board/detail/:boardNumber' - BoardDetail       //
+  //          description: 게시물 작성하기 : '/board/write' - BoardWrite       //
+  //          description: 게시물 수정하기 : '/board/update/:boardNumber' - BoardUpdate       //
   return (
-    <>
-    <Footer />
-    </>
+    <Routes>
+      <Route element={<Container />}>
+        <Route path={MAIN_PATH()} element={<Main />} />
+        <Route path={AUTH_PATH()} element={<Authentication />} />
+        <Route path={SEARCH_PATH(':searchWord')} element={<search />} />
+        <Route path={USER_PATH(':userEmail')} element={<User />} />
+        <Route path={BOARD_PATH()}>
+          <Route path={BOARD_WRITE_PATH()} element={<BoardWrite />} />
+          <Route path={BOARD_DETAIL_PATH(':boardNumber')} element={<BoardDetail />} />
+          <Route path={BOARD_UPDATE_PATH(':boardNumber')} element={<BoardUpdate />} />
+        </Route>
+        {/* 오류가 있는 url주소로 들어오는 경우 */}
+        < Route path='*' element={<h1>404 Not Found</h1>} />
+      </Route>
+    </Routes>
   );
 }
 

@@ -12,6 +12,8 @@
 }
 body {
   margin: 0;
+  /* ? 나중에 잡히는게 있어서 해놓은 넓이 */
+  min-width: 1440px;
   font-family:Pretendard-Regular;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
