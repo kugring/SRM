@@ -22,7 +22,7 @@ public class JwtProvider {
         Date expireDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
 
         String jwt =  Jwts.builder()
-        .signWith(SignatureAlgorithm.ES256, secretKey)
+        .signWith(SignatureAlgorithm.HS256, secretKey) //알고리즘 때문에 HS256 떠야한다!
         .setSubject(email).setIssuedAt(new Date()).setExpiration(expireDate)
         .compact();
 

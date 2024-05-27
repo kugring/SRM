@@ -1,7 +1,7 @@
 import React from 'react'
 import './style.css';
 import defaultProfileImage from "assets/image/default-profile-image.png"
-import { BoardListItem } from 'types/enum/interface';
+import { BoardListItem } from 'types/interface';
 import { useNavigate } from 'react-router-dom';
 
 interface Props{

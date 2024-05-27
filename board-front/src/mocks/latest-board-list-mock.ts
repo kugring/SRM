@@ -1,4 +1,4 @@
-import {BoardListItem} from "types/enum/interface";
+import {BoardListItem} from "types/interface";
 
 const latesBoardListMock: BoardListItem[] = [
     {

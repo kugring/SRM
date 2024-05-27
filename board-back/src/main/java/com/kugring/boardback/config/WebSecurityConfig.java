@@ -31,53 +31,49 @@ public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception{
+    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-        .cors(cors -> cors
-        .configurationSource(corsConfigurationSource())
-        )
-        .csrf(CsrfConfigurer::disable)
-        .httpBasic(HttpBasicConfigurer::disable)
-        .sessionManagement(sessionManagement -> sessionManagement
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authorizeHttpRequests(request -> request
-            .requestMatchers("/","/api/v1/auth/**", "ap/v1/search/**","/file/**").permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/api/v1/user/*").permitAll()
-            .anyRequest().authenticated()
-        )
-        .exceptionHandling(exceptionHandling -> exceptionHandling
-            .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
-        )
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .cors(cors -> cors
+                .configurationSource(corsConfigurationSource())
+            )
+            .csrf(CsrfConfigurer::disable)
+            .httpBasic(HttpBasicConfigurer::disable)
+            .sessionManagement(sessionManagement -> sessionManagement
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .authorizeHttpRequests(request -> request
+                .requestMatchers("/", "/api/v1/auth/**", "/api/v1/search/**", "/file/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/board/**", "/api/v1/user/*").permitAll()
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authenticationEntryPoint(new FailedAuthenticationEntryPoint())
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   
-       return httpSecurity.build();
+        return httpSecurity.build();
     }
 
     @Bean
-    protected CorsConfigurationSource corsConfigurationSource(){
+    protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedMethod("*");
-        configuration.addExposedHeader("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true); // 추가 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // 모든 패던에 대해서 등록할 것이다!
         source.registerCorsConfiguration("/**", configuration);
         return source;  
     } 
-
 }
 
-class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint{
-
+class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
        response.setContentType("application/json");
-       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);// 사용자 권한 막음
-       response.getWriter().write("{\"code:\":\"AF\",\"message\":\"Authorization Failed\"}");
-        
+       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+       response.getWriter().write("{\"code\":\"AF\",\"message\":\"Authorization Failed\"}");
     }
-    
 }
