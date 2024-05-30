@@ -4,7 +4,7 @@ import './style.css';
 
 //           interface: Input Box 컴포넌트 Propperties           //
 interface Props {
-    label: string;
+    label: String;
     type: 'text' | 'password';
     placeholder: string;
     value: string;
@@ -15,7 +15,7 @@ interface Props {
     icon?: 'eye-light-off-icon' | 'eye-light-on-icon' | 'expand-right-light-icon';
     onButtonClick?: () => void;
 
-    message?: string;
+    message?: String;
 
     onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
 }
