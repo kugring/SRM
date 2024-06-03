@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+
+// 보드에서 업로드 버튼을 누르기 위한 전역변수로 지정해놓은 코드이다.
 interface BoardStore {
     title: string;
     content: string;

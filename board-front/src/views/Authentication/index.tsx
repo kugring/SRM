@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import './style.css'
 import { signInRequest, signUpRequest } from 'apis/index';
 import SignInResponseDto from 'apis/response/auth/sign-in.response.dto';
@@ -223,26 +223,26 @@ export default function Authentication() {
 
     //          function: sign up response 함수           //
     const signUpResponse = (responseBody: SignUpResponseDto | ResponseDto | null) => {
-      if(!responseBody) {
+      if (!responseBody) {
         alert('네트워크 이상입니다.')
         return;
       }
       const { code } = responseBody;
-      if(code === 'DE'){
+      if (code === 'DE') {
         setEmailError(true);
         setEmailErrorMessage('중복되는 이메일 주소 입니다.')
       }
-      if(code === 'DN'){
+      if (code === 'DN') {
         setNicknameError(true);
         setNicknameErrorMessage('중복되는 닉네임 입니다.')
       }
-      if(code === 'DT'){
+      if (code === 'DT') {
         setTelNumberError(true);
         setTelNumberErrorMessage('중복되는 핸드폰 번호 입니다.')
       }
-      if(code === 'VF') alert('모든 값을 입력해주세요.');
-      if(code === 'DBE') alert('데이터베이스 오류입니다.');
-      if(code !== 'SU') return;
+      if (code === 'VF') alert('모든 값을 입력해주세요.');
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code !== 'SU') return;
 
       setView('sign-in');
     }
@@ -301,7 +301,7 @@ export default function Authentication() {
     }
     //            event handler: 패스워드 버튼 클릭 이벤트 처리            //
     const onPasswordButtonClickHandler = () => {
-      if (passwordButtonIcon === 'eye-light-on-icon') {
+      if (passwordButtonIcon === 'eye-light-off-icon') {
         setPasswordButtonIcon('eye-light-on-icon');
         setPasswordType('text');
       } else {
@@ -311,7 +311,7 @@ export default function Authentication() {
     }
     //            event handler: 패스워드 확인 버튼 클릭 이벤트 처리            //
     const onPasswordCheckButtonClickHandler = () => {
-      if (passwordCheckButtonIcon === 'eye-light-on-icon') {
+      if (passwordCheckButtonIcon === 'eye-light-off-icon') {
         setPasswordCheckButtonIcon('eye-light-on-icon');
         setPasswordCheckType('text');
       } else {
@@ -320,8 +320,8 @@ export default function Authentication() {
       }
     }
     //            event handler: 주소 버튼 클릭 이벤트 처리            //
-    const onAddressButtonClickHandler = () =>{
-      open({onComplete});
+    const onAddressButtonClickHandler = () => {
+      open({ onComplete });
     }
 
     //            event handler: 다음 단계 버튼 클릭 이벤트 처리            )
@@ -371,24 +371,24 @@ export default function Authentication() {
         return;
       };
       const hasNickname = nickname.trim().length !== 0;
-      if (!hasNickname){
+      if (!hasNickname) {
         setNicknameError(true);
         setNicknameErrorMessage('닉네임을 입력해주세요.');
       }
       const telNumberPattern = /^[0-9]{11,13}$/;
       const isTelNumberPattern = telNumberPattern.test(telNumber);
-      if (!isTelNumberPattern){
+      if (!isTelNumberPattern) {
         setTelNumberError(true);
         setTelNumberErrorMessage('숫자만 입력해주세요.')
       }
       const hasAddress = address.trim().length > 0;
-      if(!hasAddress){
+      if (!hasAddress) {
         setAddressError(true);
         setAddressErrorMessage('주소를 선택해주세요.')
       }
-      if(!agreedPersonal) setAgreedPersonalError(true);
+      if (!agreedPersonal) setAgreedPersonalError(true);
 
-      if(!hasNickname || !telNumberPattern || !agreedPersonal) return;
+      if (!hasNickname || !telNumberPattern || !agreedPersonal) return;
 
       const requestBody: SignUpRequestDto = {
         email, password, nickname, telNumber, address, addressDetail, agreedPersonal
@@ -415,14 +415,12 @@ export default function Authentication() {
     //            event handler: 패스워드 확인 키 다운 이벤트 처리            //
     const onPasswordCheckKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
-      if(!nicknameRef.current) return;
       onNextButtonClickHandler();
-      nicknameRef.current.focus();
     }
     //            event handler: 닉네임 키 다운 이벤트 처리            //
     const onNicknameKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
-      if(!telNumberRef.current) return;
+      if (!telNumberRef.current) return;
       telNumberRef.current.focus();
     }
     //            event handler: 핸드폰 번호 키 다운 이벤트 처리            //
@@ -434,7 +432,7 @@ export default function Authentication() {
     //            event handler: 주소 키 다운 이벤트 처리            //
     const onAddressKeyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key !== 'Enter') return;
-      if(!addressDetailRef.current) return;
+      if (!addressDetailRef.current) return;
       addressDetailRef.current.focus();
     }
     //            event handler: 상세 주소 키 다운 이벤트 처리            //
@@ -452,7 +450,13 @@ export default function Authentication() {
       if (!addressDetailRef.current) return;
       addressDetailRef.current.focus();
     }
-
+    //            effect: 페이지가 변경될 때 마다 실핼될 함수            //
+    useEffect(() => {
+      if (page === 2) {
+        if (!nicknameRef.current) return;
+        nicknameRef.current.focus();
+      }
+    }, [page])
 
     //          render: sign up card 컴포넌트 렌더링          //
     return (
@@ -473,10 +477,10 @@ export default function Authentication() {
             )}
             {page === 2 && (
               <>
-                <InputBox ref={nicknameRef} label='닉네임*' type='text' placeholder='닉네임을 입력해주세요.' value={nickname} onChange={onNicknameChangeHandler} error={isNicknameError} message={nicknameErrorMessage} onKeyDown={onNicknameKeyDownHandler}/>
-                <InputBox ref={telNumberRef} label='핸드폰 번호*' type='text' placeholder='핸드폰 번호를 입력해주세요.' value={telNumber} onChange={onTelNumberChangeHandler} error={isTelNumberlError} message={telNumberErrorMessage} onKeyDown={onTelNumberKeyDownHandler}/>
-                <InputBox ref={addressRef} label='주소*' type='text' placeholder='우편번호 찾기' value={address} onChange={onAddressChangeHandler} error={isAddressError} message={addressErrorMessage} icon='expand-right-light-icon' onButtonClick={onAddressButtonClickHandler} onKeyDown={onAddressKeyDownHandler}/>
-                <InputBox ref={addressDetailRef} label='상세 주소*' type='text' placeholder='상세 주소를 입력해주세요.' value={addressDetail} onChange={onAddressDetailChangeHandler} error={false} onKeyDown={onAddressDetailKeyDownHandler}/>
+                <InputBox ref={nicknameRef} label='닉네임*' type='text' placeholder='닉네임을 입력해주세요.' value={nickname} onChange={onNicknameChangeHandler} error={isNicknameError} message={nicknameErrorMessage} onKeyDown={onNicknameKeyDownHandler} />
+                <InputBox ref={telNumberRef} label='핸드폰 번호*' type='text' placeholder='핸드폰 번호를 입력해주세요.' value={telNumber} onChange={onTelNumberChangeHandler} error={isTelNumberlError} message={telNumberErrorMessage} onKeyDown={onTelNumberKeyDownHandler} />
+                <InputBox ref={addressRef} label='주소*' type='text' placeholder='우편번호 찾기' value={address} onChange={onAddressChangeHandler} error={isAddressError} message={addressErrorMessage} icon='expand-right-light-icon' onButtonClick={onAddressButtonClickHandler} onKeyDown={onAddressKeyDownHandler} />
+                <InputBox ref={addressDetailRef} label='상세 주소*' type='text' placeholder='상세 주소를 입력해주세요.' value={addressDetail} onChange={onAddressDetailChangeHandler} error={false} onKeyDown={onAddressDetailKeyDownHandler} />
               </>
             )}
           </div>
@@ -488,7 +492,7 @@ export default function Authentication() {
               <>
                 <div className='auth-consent-box'>
                   <div className='auth-check-box' onClick={onAgreedPersonalClickHandler}>
-                    <div className={`icon ${agreedPersonal ? 'check-round-fill-icon':'check-ring-light-icon'}`}></div>
+                    <div className={`icon ${agreedPersonal ? 'check-round-fill-icon' : 'check-ring-light-icon'}`}></div>
                   </div>
                   <div className={isAgreedPersonalError ? 'auth-consent-title-error' : 'auth-consent-title'}>{'개인정보동의'}</div>
                   <div className='auth-consent-link'>{'더보기 >'}</div>

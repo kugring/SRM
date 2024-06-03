@@ -75,6 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean hasAuthorization = StringUtils.hasText(authorization);
         if (!hasAuthorization) 
             return null;
+            // Bearer" " 공백은 일부러 넣어 놓은것이다!
         boolean isBearer = authorization.startsWith("Bearer ");
         if (!isBearer) 
             return null;

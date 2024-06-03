@@ -13,7 +13,7 @@ export default function Header() {
   //          state: path 상태           //
   const { pathname } = useLocation();
   //          state: cookie 상태           //
-  const [cookie, setCookie] = useCookies();
+  const [cookies, setCookie] = useCookies();
   //          state: 로그인 상태            //
   const [isLogin, setLogin] = useState<boolean>(false);
   //          state: 인증 페이지 상태            //
@@ -109,6 +109,7 @@ export default function Header() {
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리 함수            //
     const onSignOutButtonClickHandler = () => {
       resetLoginUser();
+      setCookie('accessToken','',{ path: MAIN_PATH(), expires: new Date()} )  // 로그아웃 진행시 setCookie를 통해서 accessToken 쿠키가 날라간다!
       navigate(MAIN_PATH());
     }
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리 함수            //
@@ -130,13 +131,14 @@ export default function Header() {
   const UploadButton = () => {
     //          state: 게시물 상태           //
     const { title, content, boardImageFileList, resetBoard }  = useBoardStore();
+
     //          event handler: 업로드 버튼 클릭 이벤트 처리 함수            //
     const onUploadButtonClickHandler = () => {
-
+      const accessToken = cookies
     } 
     //          render: 업로드 버튼 컴포넌트 렌더링           //
     if(title&&content)
-    return <div className='black-botton'>{'업로드'}</div>
+    return <div className='black-button'>{'업로드'}</div>
     //          render: 업로드 불가 버튼 컴포넌트 렌더링           //
     return <div className='disable-button'>{'업로드'}</div>
   }
@@ -158,6 +160,10 @@ export default function Header() {
     const isUserPage = pathname.startsWith(USER_PATH(''))
     setUserPage(isUserPage);
   }, [pathname])
+  //          effect: login user가 변경 될때 마다 실행될 함수           //
+  useEffect(() => {
+    setLogin(loginUser !== null);
+  }, [loginUser])
 
   //          render: 헤더 레이어웃 렌더링           //
   return (
