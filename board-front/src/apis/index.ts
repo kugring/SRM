@@ -4,6 +4,7 @@ import { ResponseDto } from "./response"; // ResponseDto 타입을 import 합니
 import { SignInResponseDto, SignUpResponseDto } from './response/auth'; // SignInResponseDto, SignUpResponseDto 타입을 import 합니다.
 import { GetSignInUserResponseDto } from "./response/user";
 import { PostBoardRequestDto } from "./request/board";
+import { PostBoardResponseDto } from "./response/board";
 
 // API 서버의 기본 도메인을 상수로 정의합니다.
 const DOMAIN = 'http://localhost:4000';
@@ -71,16 +72,18 @@ export const signUpRequest = async (requestBody: SignUpRequestDto) => {
 const POST_BOARD_URL = () => `${API_DOMAIN}/board`;
 
 // 로그인한 유저만 받아들어야 하므로 액세스토큰도 같이 받아온다!
-export const PostBoardRequest = async (requestBody: PostBoardRequestDto, accessToken: string) =>{
+export const postBoardRequest = async (requestBody: PostBoardRequestDto, accessToken: string) =>{
     const result = await axios.post(POST_BOARD_URL(), requestBody, authorization(accessToken))
     .then(response => {
-        const responseBody: PostBoardRequestDto = response.data;
+        const responseBody: PostBoardResponseDto = response.data;
         return responseBody;
     })
     .catch(error => {
+        if(!error.response) return null;
         const responseBody:ResponseDto = error.response.data;
         return responseBody;
     })
+    console.log(result)
     return result;
 } 
 

@@ -4,6 +4,10 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { AUTH_PATH, BOARD_DETAIL_PATH, BOARD_PATH, BOARD_UPDATE_PATH, BOARD_WRITE_PATH, MAIN_PATH, SEARCH_PATH, USER_PATH } from 'constant'
 import { useCookies } from 'react-cookie'
 import { useBoardStore, useLoginUserStore } from 'stores'
+import { postBoardRequest, fileUploadRequest } from 'apis'
+import { PostBoardRequestDto } from 'apis/request/board'
+import { ResponseDto } from 'apis/response'
+import { PostBoardResponseDto } from 'apis/response/board'
 
 //          component: 헤더 레이어웃            //
 export default function Header() {
@@ -109,20 +113,20 @@ export default function Header() {
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리 함수            //
     const onSignOutButtonClickHandler = () => {
       resetLoginUser();
-      setCookie('accessToken','',{ path: MAIN_PATH(), expires: new Date()} )  // 로그아웃 진행시 setCookie를 통해서 accessToken 쿠키가 날라간다!
+      setCookie('accessToken', '', { path: MAIN_PATH(), expires: new Date() })  // 로그아웃 진행시 setCookie를 통해서 accessToken 쿠키가 날라간다!
       navigate(MAIN_PATH());
     }
     //          event handler: 마이페이지 버튼 클릭 이벤트 처리 함수            //
     const onSignInButtonClickHandler = () => {
       navigate(AUTH_PATH());
     }
-    
-    if(isLogin && userEmail === loginUser?.email)   // "?"를 쓰는 이유는 loginUser가 null인 경우에 런타임오류를 방지하기 위한 typeScript의 Optional Chaining 이다!
-    //          render: 로그아웃 버튼 컴포넌트 렌더링           //
-    return <div className='white-button' onClick={onSignOutButtonClickHandler}>{'로그아웃'}</div>;
+
+    if (isLogin && userEmail === loginUser?.email)   // "?"를 쓰는 이유는 loginUser가 null인 경우에 런타임오류를 방지하기 위한 typeScript의 Optional Chaining 이다!
+      //          render: 로그아웃 버튼 컴포넌트 렌더링           //
+      return <div className='white-button' onClick={onSignOutButtonClickHandler}>{'로그아웃'}</div>;
     if (isLogin)
-    //          render: 마이페이지 버튼 컴포넌트 렌더링           //
-    return <div className='white-button' onClick={onMyPageButtonClickHandler}>{'마이페이지'}</div>;
+      //          render: 마이페이지 버튼 컴포넌트 렌더링           //
+      return <div className='white-button' onClick={onMyPageButtonClickHandler}>{'마이페이지'}</div>;
     //          render: 로그인 버튼 컴포넌트 렌더링           //
     return <div className='black-button' onClick={onSignInButtonClickHandler}>{'로그인'}</div>;
   }
@@ -130,15 +134,47 @@ export default function Header() {
   //          component: 업로드 버튼 컴포넌트            //
   const UploadButton = () => {
     //          state: 게시물 상태           //
-    const { title, content, boardImageFileList, resetBoard }  = useBoardStore();
+    const { title, content, boardImageFileList, resetBoard } = useBoardStore();
+
+    //            function: post board response 처리 함수           //
+    const postBoardResponse = (responseBody: PostBoardResponseDto | ResponseDto | null) => {
+      if (!responseBody) return;
+      const { code } = responseBody;
+      if (code === 'DBE') alert('데이터베이스 오류입니다.');
+      if (code === 'AF' || code == 'NU') navigate(AUTH_PATH());
+      if (code === 'VF') alert('제목과 내용은 필수입니다.');
+      if (code !== 'SU') return;
+
+      resetBoard();
+      if(!loginUser) return;
+      const { email } = loginUser;
+      // 업로드 이후 마이페이지로 이동하게 한다.
+      navigate(USER_PATH(email));
+    }
 
     //          event handler: 업로드 버튼 클릭 이벤트 처리 함수            //
-    const onUploadButtonClickHandler = () => {
-      const accessToken = cookies
-    } 
+    const onUploadButtonClickHandler = async () => {
+      const accessToken = cookies.accessToken;
+      if (!accessToken) return;
+
+      const boardImageList: string[] = [];
+
+      for (const file of boardImageFileList) {
+        const data = new FormData();
+        data.append('file', file);
+
+        const url = await fileUploadRequest(data);
+        if (url) boardImageList.push(url);
+      }
+
+      const requestBody: PostBoardRequestDto = {
+        title, content, boardImageList
+      }
+      postBoardRequest(requestBody, accessToken).then(postBoardResponse);
+    }
     //          render: 업로드 버튼 컴포넌트 렌더링           //
-    if(title&&content)
-    return <div className='black-button'>{'업로드'}</div>
+    if (title && content)
+      return <div className='black-button' onClick={onUploadButtonClickHandler}>{'업로드'}</div>
     //          render: 업로드 불가 버튼 컴포넌트 렌더링           //
     return <div className='disable-button'>{'업로드'}</div>
   }

@@ -1,5 +1,5 @@
 import ResponseDto from '../response.dto';
 
-export default interface postBoardResponseDto extends ResponseDto{
+export default interface PostBoardResponseDto extends ResponseDto{
 
 }

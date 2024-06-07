@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name ="favortie")
-@Table(name ="favortie")
+@Entity(name ="favorite")
+@Table(name ="favorite")
 @IdClass(FavoritePk.class) //id가 어떤 클래스를 따르는지 지정해준다. 파라미터에는 대항 따르는 클래스를 넣어준다.
 public class FavoriteEntity {
 

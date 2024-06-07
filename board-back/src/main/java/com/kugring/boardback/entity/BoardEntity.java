@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "board")
 public class BoardEntity {
     
+    
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)//자동생성관련 어노테이션 
     private int boardNumber;
     // @Colum(name="~~~") 원래는 하나하나씩 맵핑을 해줘야하지만 "명령규칙"만 잘 지킨다면 그대로 사용해도 괜찮다.
@@ -50,5 +51,21 @@ public class BoardEntity {
         this.commentCount = 0;
         this.viewCount = 0;
         this.writerEmail = email;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
+    public void increaseFavoriteCount(){
+        this.favoriteCount++;
+    }
+
+    public void increaseCommentCount(){
+        this.commentCount++;
+    }
+
+    public void decreaseFavoriteCount(){
+        this.favoriteCount--;
     }
 }
