@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
+import com.kugring.boardback.dto.request.board.PatchBoardRequestDto;
 import com.kugring.boardback.dto.request.board.PostBoardRequestDto;
 
 import jakarta.persistence.Entity;
@@ -67,5 +68,11 @@ public class BoardEntity {
 
     public void decreaseFavoriteCount(){
         this.favoriteCount--;
+    }
+
+    // 해당 보이드를 통해서 기존의 데이터를 this로 데이터를 바꿔준다.
+    public void patchBoard(PatchBoardRequestDto dto){
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
     }
 }

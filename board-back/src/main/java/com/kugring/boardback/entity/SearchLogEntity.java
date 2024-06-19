@@ -16,9 +16,18 @@ import lombok.NoArgsConstructor;
 @Table(name = "search_log")
 public class SearchLogEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sequence;
     private String searchWord;
     private String relationWord;
     private boolean relation; // tinyint?? 일부러 boolean타입
+
+    public SearchLogEntity(String searchWord, String relationWord, boolean relation) {
+
+        this.searchWord = searchWord;
+        this.relationWord = relationWord;
+        this.relation = relation;
+
+    }
 }

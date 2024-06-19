@@ -22,22 +22,21 @@ public class FileServiceImplement implements FileService {
     @Override
     public String upload(MultipartFile file) {
 
-
         // 파일이 비어있으면 리턴
-        if (file.isEmpty()) return null;
-
+        if (file.isEmpty())
+            return null;
 
         String originalFileName = file.getOriginalFilename();
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String uuid = UUID.randomUUID().toString();
         String saveFileName = uuid + extension;
         String savePath = filePath + saveFileName;
-        try{
+        try {
             // 해당 경로로 파일이 저장됨
             file.transferTo(new File(savePath));
-        }catch(Exception exception){
-            
-        System.out.println("fileservice catch");
+        } catch (Exception exception) {
+
+            System.out.println("fileservice catch");
             exception.printStackTrace();
             return null;
         }
@@ -51,15 +50,15 @@ public class FileServiceImplement implements FileService {
 
         Resource resource = null;
 
-        try{
-            
+        try {
+
             // 스프링의 urlRessource이다!
-            resource = new UrlResource("file:"+filePath+fileName);
-        } catch(Exception exception){
+            resource = new UrlResource("file:" + filePath + fileName);
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
         return resource;
     }
-    
+
 }

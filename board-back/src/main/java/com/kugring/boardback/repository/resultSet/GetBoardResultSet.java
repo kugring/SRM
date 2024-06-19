@@ -8,6 +8,6 @@ public interface GetBoardResultSet {
     String getContent();
     String getWriteDatetime();
     String getWriterEmail();
-    String getWriterNinckname();
+    String getWriterNickname();
     String getWriterProfileImage();
 }

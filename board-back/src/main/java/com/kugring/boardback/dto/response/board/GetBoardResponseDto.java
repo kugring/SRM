@@ -43,7 +43,7 @@ public class GetBoardResponseDto extends ResponseDto {
         this.boardImageList = boardImageList;
         this.writeDatetime = resultSet.getWriteDatetime();
         this.writerEmail = resultSet.getWriterEmail();
-        this.writerNickname = resultSet.getWriterNinckname();
+        this.writerNickname = resultSet.getWriterNickname();
         this.writerProfileImage = resultSet.getWriterProfileImage();
     }
 

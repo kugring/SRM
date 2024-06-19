@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Main from 'views/Main';
 import Authentication from 'views/Authentication';
 import UserP from 'views/User';
+import Search from 'views/Search';
 import Container from 'layouts/Container';
 import BoardDetail from 'views/Board/Detail';
 import BoardUpdate from 'views/Board/Update';
@@ -62,7 +63,7 @@ function App() {
       <Route element={<Container />}>
         <Route path={MAIN_PATH()} element={<Main />} />
         <Route path={AUTH_PATH()} element={<Authentication />} />
-        <Route path={SEARCH_PATH(':searchWord')} element={<search />} />
+        <Route path={SEARCH_PATH(':searchWord')} element={<Search />} />
         <Route path={USER_PATH(':userEmail')} element={<UserP />} />
         <Route path={BOARD_PATH()}>
           <Route path={BOARD_WRITE_PATH()} element={<BoardWrite />} />

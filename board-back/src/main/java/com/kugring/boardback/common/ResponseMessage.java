@@ -22,6 +22,4 @@ public interface ResponseMessage {
     
     // HTTP Status 500
     String DATABASE_ERROR = "Datebase error.";
-    
-    
 }

@@ -3,9 +3,9 @@
     "version": "2.2.13",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -153.53100000000006,
-    "scrollLeft": -3,
-    "zoomLevel": 1,
+    "scrollTop": -291.47170000000006,
+    "scrollLeft": -155,
+    "zoomLevel": 0.9,
     "show": {
       "tableComment": true,
       "columnComment": true,
@@ -19,7 +19,7 @@
     },
     "database": "MySQL",
     "databaseName": "",
-    "canvasType": "@vuerd/builtin-sql-ddl",
+    "canvasType": "ERD",
     "language": "GraphQL",
     "tableCase": "pascalCase",
     "columnCase": "camelCase",
@@ -249,6 +249,29 @@
             }
           },
           {
+            "id": "c2719fd9-986f-4390-a6ac-470b08d278ef",
+            "name": "writer_email",
+            "comment": "작성자",
+            "dataType": "VARCHAR(50)",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": true,
+              "pfk": false,
+              "widthName": 72.3828125,
+              "widthComment": 60,
+              "widthDataType": 82.1328125,
+              "widthDefault": 60
+            }
+          },
+          {
             "id": "a1122ea4-5dcf-47c4-9c4e-91c1fe1f2e8d",
             "name": "title",
             "comment": "게시물 제목",
@@ -383,29 +406,6 @@
               "widthName": 67.04443359375,
               "widthComment": 89.140625,
               "widthDataType": 60,
-              "widthDefault": 60
-            }
-          },
-          {
-            "id": "c2719fd9-986f-4390-a6ac-470b08d278ef",
-            "name": "writer_email",
-            "comment": "사용자 이메일",
-            "dataType": "VARCHAR(50)",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": true
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": true,
-              "pfk": false,
-              "widthName": 72.3828125,
-              "widthComment": 84.5703125,
-              "widthDataType": 82.1328125,
               "widthDefault": 60
             }
           }

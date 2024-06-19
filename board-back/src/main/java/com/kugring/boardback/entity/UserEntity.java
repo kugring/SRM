@@ -36,8 +36,12 @@ public class UserEntity {
         this.agreedPersonal = dto.getAgreedPersonal();
     }
 
-    // @Override
-    // public String toString() {
-    //     return  "email : " + email + "   password : " + password;
-    // }
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+    public void setProfileImage(String profileImage){
+        this.profileImage = profileImage;
+    }
+
+
 }

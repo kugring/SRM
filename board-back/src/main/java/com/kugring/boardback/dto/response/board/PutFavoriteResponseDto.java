@@ -24,7 +24,7 @@ public class PutFavoriteResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
     // 존재하지 않는 유저에 대한 결과 반환
-    public static ResponseEntity<ResponseDto> notExistUser(){
+    public static ResponseEntity<ResponseDto> noExistUser(){
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
